@@ -6,20 +6,14 @@ class Transaction {
     this.account = account;
   }
   commit() {
-    // const isAllowed = function(transaction) {
-    //   console.log("Transaction:", transaction);
-    //   console.log("Balance:", this);
-    //   // if (transaction.value > this.balance) {
-    //   //   return false;
-    //   // }
-    //   return true;
-    // };
-    // console.log("This.value:", this.value);
-    // if (isAllowed(this.value)) {
-      this.time = new Date();
-      this.account.addTransaction(this);
-    // }
-    // console.log("Transaction failed. Account balance is", this.account.balance);
+    console.log("Commit this:", this.isAllowed()) // WHY IS this.isAllowed() not a function???
+    // if (!this.isAllowed()) {
+    if (false) {
+      console.log("Transaction failed. Account balance is", this.account.balance);
+      return;
+    }
+    this.time = new Date();
+    this.account.addTransaction(this);
   }
 }
 
@@ -53,6 +47,11 @@ class Withdrawal extends Transaction {
     return this._amount * -1;
   }
 
+  isAllowed() {
+    console.log("isAllowed:", this)
+    return true;
+  }
+
 }
 
 class Deposit extends Transaction {
@@ -69,19 +68,19 @@ class Deposit extends Transaction {
 // We use the code below to "drive" the application logic above and make sure it's working as expected
 
 const myAccount = new Account("snow-patrol");
-console.log(myAccount);
+// console.log(myAccount);
 
 
 let t1 = new Withdrawal(10, myAccount);
 t1.commit();
-console.log('Transaction 1:', t1);
+// console.log('Transaction 1:', t1);
 // console.log(myAccount)
 // console.log("Balance:", myAccount.balance)
-let t2 = new Withdrawal(10, myAccount);
+let t2 = new Withdrawal(12, myAccount);
 t2.commit();
-console.log('Transaction 2:', t2);
+// console.log('Transaction 2:', t2);
 
 let t3 = new Deposit(30.00, myAccount);
 t3.commit();
-console.log('Transaction 3:', t3);
+// console.log('Transaction 3:', t3);
 console.log('Balance:', myAccount.balance);
