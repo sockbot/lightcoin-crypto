@@ -1,23 +1,4 @@
 // let balance = 500.00;
-
-class Transaction {
-  constructor(amount, account) {
-    this._amount = amount;
-    this.account = account;
-  }
-  commit() {
-    console.log("Commit this:", this.isAllowed()) // WHY IS this.isAllowed() not a function???
-    // if (!this.isAllowed()) {
-    if (false) {
-      console.log("Transaction failed. Account balance is", this.account.balance);
-      return;
-    }
-    this.time = new Date();
-    this.account.addTransaction(this);
-  }
-}
-
-
 class Account {
 
   constructor(username) {
@@ -41,6 +22,21 @@ class Account {
   }
 }
 
+class Transaction {
+  constructor(amount, account) {
+    this._amount = amount;
+    this.account = account;
+  }
+  commit() {
+    if (!this.isAllowed()) {
+      console.log("Transaction failed. Account balance is", this.account.balance);
+      return;
+    }
+    this.time = new Date();
+    this.account.addTransaction(this);
+  }
+}
+
 class Withdrawal extends Transaction {
 
   get value() {
@@ -48,8 +44,11 @@ class Withdrawal extends Transaction {
   }
 
   isAllowed() {
-    console.log("isAllowed:", this)
-    return true;
+    // console.log(`${this.account.balance}, ${this.value * -1}`)
+    if (this.account.balance > this.value * -1) {
+      return true;
+    }
+    return false;
   }
 
 }
@@ -58,6 +57,11 @@ class Deposit extends Transaction {
 
   get value() {
     return this._amount;
+  }
+
+  isAllowed() {
+    return true;
+    // deposits are always allowed
   }
 
 }
